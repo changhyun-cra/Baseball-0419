@@ -1,7 +1,21 @@
 #include "pch.h"
 #include "../Project4/baseball.cpp"
 
-TEST(BaseballGame, ThrowExceptionWhenInputLengthIsUnmatched) {
+class BaseballFixture : public testing::Test {
+public:
 	Baseball game;
-	EXPECT_THROW(game.guess(string("12")), length_error);
+	void assertIllegalArgument(string guessNumber) {
+		try {
+			game.guess(string("12s"));
+			FAIL();
+		}
+		catch (exception e) {
+
+		}
+	}
+};
+
+TEST_F(BaseballFixture, ThrowExceptionWhenInvalidCase) {
+	assertIllegalArgument("12");
+	assertIllegalArgument("12s");
 }
