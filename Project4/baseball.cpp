@@ -1,4 +1,5 @@
 #include <stdexcept>
+#include <string>
 
 using namespace std;
 
@@ -24,7 +25,7 @@ public:
 		return false;
 	}
 
-	void assertIllegalArgument(const std::string& guessNumber)
+	void assertIllegalArgument(const string& guessNumber)
 	{
 		if (guessNumber.length() != 3) {
 			throw length_error("Must be three letters.");
@@ -40,12 +41,33 @@ public:
 		}
 	}
 
+	int checkStrike(const string& guessNumber) {
+		int strike = 0;
+		for (int idx = 0; idx < question.size(); idx++) {
+			if (guessNumber[idx] == question[idx]) {
+				strike++;
+			}
+		}
+		return strike;
+	}
+
+	int checkBall(const string& guessNumber) {
+		int ball = 0;
+		for (char ch : guessNumber) {
+			int place = question.find(ch);
+			if (place < 0) continue;
+			ball++;
+		}
+		return ball;
+	}
+
 	GuessResult guess(const string& guessNumber) {
 		assertIllegalArgument(guessNumber);
 		if (guessNumber == question) {
 			return { true, 3,0 };
 		}
-		return { false, 0, 0 };
+
+		return { false, checkStrike(guessNumber), checkBall(guessNumber)-checkStrike(guessNumber)};
 	}
 	
 private:
